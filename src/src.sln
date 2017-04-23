@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rbec.Formatting", "Rbec.For
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rbec.FormattingTest", "Rbec.FormattingTest\Rbec.FormattingTest.csproj", "{4F4636F1-9ECA-43F5-BFA4-79EF640F824C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{05AC105D-9784-43C3-9BF7-7825FA74709F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4F4636F1-9ECA-43F5-BFA4-79EF640F824C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F4636F1-9ECA-43F5-BFA4-79EF640F824C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F4636F1-9ECA-43F5-BFA4-79EF640F824C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05AC105D-9784-43C3-9BF7-7825FA74709F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05AC105D-9784-43C3-9BF7-7825FA74709F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05AC105D-9784-43C3-9BF7-7825FA74709F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05AC105D-9784-43C3-9BF7-7825FA74709F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
