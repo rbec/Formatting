@@ -14,11 +14,17 @@ namespace Rbec.FormattingTest.Graphs
       return (n, m - n);
     }
 
-    [TestMethod] public void TestTriangle()
+    [TestMethod] public void TestTriangleInvert()
     {
       for (var i = 0; i < 100000; i++)
         Assert.AreEqual(TriangleInvert(i), Combinatronics.TriangleInvert(i));
+    }
 
+    [TestMethod]
+    public void TestTriangleInvertsTriangle()
+    {
+      for (var i = 0; i < 100000; i++)
+        Assert.AreEqual(i, Combinatronics.Triangle(Combinatronics.TriangleInvert(i)));
     }
   }
 }

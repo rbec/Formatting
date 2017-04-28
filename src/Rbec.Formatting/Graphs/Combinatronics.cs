@@ -4,10 +4,13 @@ namespace Rbec.Formatting.Graphs
 {
   public static class Combinatronics
   {
-    public static (int, int) TriangleInvert(int n)
+    public static int Triangle((int i, int j) coordinate) =>
+      (coordinate.i + coordinate.j) * (coordinate.i + coordinate.j + 1) / 2 + coordinate.i;
+
+    public static (int i, int j) TriangleInvert(int n)
     {
-      //var m = ((int)Math.Sqrt(1.0 + 8 * n) - 1) / 2;
-      var m = (SqrtInt(1 + 8 * n) - 1) / 2;
+      var m = ((int)Math.Sqrt(1.0 + 8 * n) - 1) / 2;
+      //var m = (SqrtInt(1 + 8 * n) - 1) / 2;
       var mm = n - m * (m + 1) / 2;
       return (mm, m - mm);
     }
