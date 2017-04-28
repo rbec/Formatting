@@ -102,11 +102,10 @@ namespace Rbec.Formatting.Graphs
       var l = edges.Count;
       for (var k = 0; k < sol.Length; k++)
       {
-        var δ = sol[k, k] - edges[k, l - k - 1];
-        for (var i = 0; i < k; i++)
-          δ = Math.Min(δ, sol[i, k] - edges[i, l - k - 1]);
-        for (var j = 0; j < l - k - 1; j++)
-          δ = Math.Min(δ, sol[k, l - j - 1] - edges[k, j]);
+        var δ = int.MaxValue;
+        for (var i = 0; i <= k; i++)
+          for (var j = 0; j < l - k; j++)
+            δ = Math.Min(δ, sol[i, l - j - 1] - edges[i, j]);
         if (δ > 0)
           sol.Delta(k, -δ);
       }
@@ -117,16 +116,10 @@ namespace Rbec.Formatting.Graphs
     {
       var l = edges.Count;
       for (var k = 0; k < sol.Length; k++)
-      {
-        if (sol[k, k] < edges[k, l - k - 1])
-          return false;
-        for (var i = 0; i < k; i++)
-          if (sol[i, k] < edges[i, l - k - 1])
-            return false;
-        for (var j = 0; j < l - k - 1; j++)
-          if (sol[k, l - j - 1] < edges[k, j])
-            return false;
-      }
+        for (var i = 0; i <= k; i++)
+          for (var j = 0; j < l - k; j++)
+            if (sol[i, l - j - 1] < edges[i, j])
+              return false;
       return true;
     }
 
@@ -138,9 +131,9 @@ namespace Rbec.Formatting.Graphs
         var max = 0;
         for (var j = 0; j < sol.Length - i; j++)
           max = Math.Max(max, edges[i, j]);
-        sol[i] = i == 0 ? max : max + sol[i - 1];
+        sol[i] = max;
       }
-      return new Solution(sol);
+      return new Solution(PrefixSum(sol));
     }
   }
 

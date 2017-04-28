@@ -57,7 +57,30 @@ namespace Rbec.FormattingTest.Graphs
           for (var j = 0; j < array.Length; j++)
             array[j] = random.Next(10);
           var edges = new Edges(array);
-          Assert.IsTrue(LP.IsFeasible(edges, LP.Feasible(edges)), $"{Environment.NewLine}{edges}");
+          Assert.IsTrue(LP.IsFeasible(edges, LP.Feasible(edges)));
+        }
+      }
+
+    }
+
+    [TestMethod]
+    public void TestSolutionIsFeasible()
+    {
+
+      var random = new Random();
+      for (var k = 10; k >= 0; k--)
+      {
+        var m = k * (k + 1) / 2;
+
+        var array = new int[m];
+
+        for (var i = 0; i < 1000; i++)
+        {
+          for (var j = 0; j < array.Length; j++)
+            array[j] = random.Next(10);
+          var edges = new Edges(array);
+          var solution = LP.Solve(edges);
+          Assert.IsTrue(LP.IsFeasible(edges, solution), $"{Environment.NewLine}{edges}{Environment.NewLine}{Environment.NewLine}{solution}{Environment.NewLine}{LP.Feasible(edges)}");
         }
       }
 
@@ -88,10 +111,29 @@ namespace Rbec.FormattingTest.Graphs
           for (var j = 0; j < array.Length; j++)
             array[j] = random.Next(6);
           var edges = new Edges(array);
-          Assert.AreEqual(ExhaustiveSearch(edges).Length, LP.Solve(edges).Length, $"{Environment.NewLine}{edges}");
+          var solution = LP.Solve(edges);
+          Assert.AreEqual(ExhaustiveSearch(edges).Length, solution.Length);
         }
       }
 
     }
+
+    //[TestMethod] public void TestSolve()
+    //{
+    //  var random = new Random();
+    //  var k = 10000;
+    //  var m = k * (k + 1) / 2;
+
+    //  var array = new int[m];
+
+    //  for (var i = 0; i < 1; i++)
+    //  {
+    //    for (var j = 0; j < array.Length; j++)
+    //      array[j] = random.Next(100);
+    //    var edges = new Edges(array);
+    //    Assert.IsTrue(LP.IsFeasible(edges, LP.Solve(edges)));
+    //  }
+
+    //}
   }
 }
