@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
 using BenchmarkDotNet.Running;
@@ -10,11 +12,25 @@ namespace Sandbox
   [MinColumn, MaxColumn]
   public class Benchmarks
   {
-    [Benchmark] public void TriangleInvert1()
+    [Benchmark]
+    public void A()
     {
       for (var i = 0; i < 100000; i++)
-        Combinatronics.TriangleInvert(i);
+        Combinatronics.A(i);
     }
+
+    [Benchmark]
+    public void C()
+    {
+      for (var i = 0; i < 100000; i++)
+        Combinatronics.C(i);
+    }
+
+    //[Benchmark] public void TriangleInvert1()
+    //{
+    //  for (var i = 0; i < 100000; i++)
+    //    Combinatronics.DecodeTriangle(i);
+    //}
 
     //[Benchmark] public void TriangleInvert2()
     //{
@@ -27,7 +43,32 @@ namespace Sandbox
   {
     static void Main(string[] args)
     {
-      var summary = BenchmarkRunner.Run<Benchmarks>();
+      var edges = new[]
+                  {
+                    0,
+                    0, 0,
+                    0, 0, 7,
+                    0, 6, 0, 0,
+                    3, 3, 2, 1, 1
+                  };
+      var e = new Edges(edges);
+
+      Console.WriteLine(e);
+      Console.WriteLine();
+      Console.WriteLine("    " + string.Join(" ", LP.Feasible(e).Select(n=>$"{n,2}")));
+
+      var sol = LP.Solve(e, LP.Feasible(e));
+      Console.WriteLine("    " + string.Join(" ", sol.Select(n => $"{n,2}")));
+
+      // Console.WriteLine("     " + string.Join(" ",sol));
+
+
+      //for (var i = 0; i < 20; i++)
+      //{
+      //  //Console.WriteLine($"{i,5} {Combinatronics.A(i)} : {Combinatronics.C(i)}");
+      //  Console.WriteLine($"{i,5} {Combinatronics.DecodeTriangle(i)}");
+      //}
+      //var summary = BenchmarkRunner.Run<Benchmarks>();
       Console.ReadLine();
       ////var n = 4;
       //for (var n = 0; n <= 7; n++)
