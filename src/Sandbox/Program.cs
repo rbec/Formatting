@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using BenchmarkDotNet.Attributes;
@@ -12,15 +13,13 @@ namespace Sandbox
   [MinColumn, MaxColumn]
   public class Benchmarks
   {
-    [Benchmark]
-    public void A()
+    [Benchmark] public void A()
     {
       for (var i = 0; i < 100000; i++)
         Combinatronics.A(i);
     }
 
-    [Benchmark]
-    public void C()
+    [Benchmark] public void C()
     {
       for (var i = 0; i < 100000; i++)
         Combinatronics.C(i);
@@ -43,10 +42,18 @@ namespace Sandbox
   {
     static void Main(string[] args)
     {
-      foreach (var sol in LP.All(3, 3))
-      {
-        Console.WriteLine(sol);
-      }
+      var g = new Dictionary<Edge, int>
+              {
+                {new Edge(9, 8), 2},
+                {new Edge(8, 7), 3},
+                {new Edge(7, 6), 1},
+                {new Edge(8, 6), 5},
+                {new Edge(9, 7), 5},
+              };
+      var order = Layout.ToLayout(g);
+      var s = string.Join(" ", order);
+      Console.WriteLine(s);
+
       //var edges = new[]
       //            {
       //              0,

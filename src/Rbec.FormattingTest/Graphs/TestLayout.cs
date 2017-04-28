@@ -6,23 +6,19 @@ using Rbec.Formatting.Graphs;
 namespace Rbec.FormattingTest.Graphs
 {
   [TestClass]
-  public class TestGraph
+  public class TestLayout
   {
 
     [TestMethod] public void TestGenerate()
     {
-      var g = new Dictionary<int, int[]>
+      var g = new Dictionary<Edge, int>
               {
-                {5,new []{11}},
-                {7,new []{11,8}},
-                {3,new []{8,10}},
-                {11,new []{10,2,9}},
-                {8,new []{9}}
+                {new Edge(5,3), 2},
+                {new Edge(3,9), 7}
               };
-      var order = g.TopologicalOrder();
+      var order = Layout.ToLayout(g);
       var s = string.Join(" ", order);
       Console.WriteLine(s);
-      Assert.IsTrue(true);
     }
   }
 }

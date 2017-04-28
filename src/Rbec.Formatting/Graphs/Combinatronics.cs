@@ -6,7 +6,7 @@ namespace Rbec.Formatting.Graphs
 {
   public sealed class Solution
   {
-    private readonly int[] Array;
+    public readonly int[] Array;
 
     public int Length => Array.Length;
 
