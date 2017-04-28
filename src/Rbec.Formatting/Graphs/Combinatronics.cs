@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Rbec.Formatting.Graphs
@@ -6,6 +7,8 @@ namespace Rbec.Formatting.Graphs
   public sealed class Solution
   {
     private readonly int[] Array;
+
+    public int Length => Array.Length;
 
     public Solution(int[] array)
     {
@@ -17,13 +20,15 @@ namespace Rbec.Formatting.Graphs
     public void Delta(int i, int δ)
     {
       for (var j = i; j < Array.Length; j++)
-        Array[j] -= δ;
+        Array[j] += δ;
     }
 
     public override string ToString()
     {
       return "    " + string.Join(" ", Array.Select(n => $"{n,2}"));
     }
+
+    public int Size => Array[Array.Length - 1];
   }
 
   public sealed class Edges
@@ -61,26 +66,71 @@ namespace Rbec.Formatting.Graphs
 
   public static class LP
   {
-    public static int[] Solve(Edges edges, int[] sol)
+    public static int[] PrefixSum(int[] array)
+    {
+      var l = new int[array.Length];
+      if (l.Length > 0)
+        l[0] = array[0];
+      for (var i = 1; i < l.Length; i++)
+        l[i] = l[i - 1] + array[i];
+      return l;
+    }
+
+    public static IEnumerable<Solution> All(int n, int max)
+    {
+      var array = new int[n];
+
+      while (true)
+      {
+        yield return new Solution(PrefixSum(array));
+        var i = 0;
+        while (array[i] == max)
+        {
+          array[i] = 0;
+          i++;
+          if (i == array.Length)
+            yield break;
+        }
+        array[i]++;
+      }
+    }
+
+    public static Solution Solve(Edges edges) => Solve(edges, Feasible(edges));
+
+    public static Solution Solve(Edges edges, Solution sol)
     {
       var l = edges.Count;
       for (var k = 0; k < sol.Length; k++)
       {
-        var s = k == 0 ? 0 : sol[k - 1];
-
-        var δ = sol[k]-s- edges[k, l - k - 1];
+        var δ = sol[k, k] - edges[k, l - k - 1];
         for (var i = 0; i < k; i++)
-          δ = Math.Min(δ, sol[k] - (i == 0 ? 0 : sol[i - 1]) - edges[i, l - k - 1]);
-        for (var j = 0; j < l-k-1; j++)
-          δ = Math.Min(δ, sol[l-j-1] - s - edges[k, j]);
+          δ = Math.Min(δ, sol[i, k] - edges[i, l - k - 1]);
+        for (var j = 0; j < l - k - 1; j++)
+          δ = Math.Min(δ, sol[k, l - j - 1] - edges[k, j]);
         if (δ > 0)
-          for (var j = k; j < sol.Length; j++)
-            sol[j] -= δ;
+          sol.Delta(k, -δ);
       }
       return sol;
     }
 
-    public static int[] Feasible(Edges edges)
+    public static bool IsFeasible(Edges edges, Solution sol)
+    {
+      var l = edges.Count;
+      for (var k = 0; k < sol.Length; k++)
+      {
+        if (sol[k, k] < edges[k, l - k - 1])
+          return false;
+        for (var i = 0; i < k; i++)
+          if (sol[i, k] < edges[i, l - k - 1])
+            return false;
+        for (var j = 0; j < l - k - 1; j++)
+          if (sol[k, l - j - 1] < edges[k, j])
+            return false;
+      }
+      return true;
+    }
+
+    public static Solution Feasible(Edges edges)
     {
       var sol = new int[edges.Count];
       for (var i = 0; i < sol.Length; i++)
@@ -90,7 +140,7 @@ namespace Rbec.Formatting.Graphs
           max = Math.Max(max, edges[i, j]);
         sol[i] = i == 0 ? max : max + sol[i - 1];
       }
-      return sol;
+      return new Solution(sol);
     }
   }
 

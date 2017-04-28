@@ -43,22 +43,26 @@ namespace Sandbox
   {
     static void Main(string[] args)
     {
-      var edges = new[]
-                  {
-                    0,
-                    0, 0,
-                    0, 0, 7,
-                    0, 6, 0, 0,
-                    3, 3, 2, 1, 1
-                  };
-      var e = new Edges(edges);
+      foreach (var sol in LP.All(3, 3))
+      {
+        Console.WriteLine(sol);
+      }
+      //var edges = new[]
+      //            {
+      //              0,
+      //              0, 0,
+      //              0, 0, 7,
+      //              0, 6, 0, 0,
+      //              3, 3, 2, 1, 1
+      //            };
+      //var e = new Edges(edges);
 
-      Console.WriteLine(e);
-      Console.WriteLine();
-      Console.WriteLine("    " + string.Join(" ", LP.Feasible(e).Select(n=>$"{n,2}")));
+      //Console.WriteLine(e);
+      //Console.WriteLine();
+      //Console.WriteLine(LP.Feasible(e));
 
-      var sol = LP.Solve(e, LP.Feasible(e));
-      Console.WriteLine("    " + string.Join(" ", sol.Select(n => $"{n,2}")));
+      //var sol = LP.Solve(e, LP.Feasible(e));
+      //Console.WriteLine(sol);
 
       // Console.WriteLine("     " + string.Join(" ",sol));
 
