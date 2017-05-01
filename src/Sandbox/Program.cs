@@ -33,7 +33,7 @@ namespace Sandbox
                 {new Edge(8, 6), 5},
                 {new Edge(9, 7), 5},
               };
-      var order = Layout.ToLayout(g);
+      var order = Solver.ToLayout(g);
       var s = string.Join(" ", order);
       Console.WriteLine(s);
 

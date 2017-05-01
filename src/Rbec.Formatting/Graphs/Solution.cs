@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
-namespace Rbec.Formatting.Graphs {
+namespace Rbec.Formatting.Graphs
+{
   public sealed class Solution
   {
     public readonly int[] Array;
@@ -20,6 +21,6 @@ namespace Rbec.Formatting.Graphs {
         Array[j] += δ;
     }
 
-    public override string ToString() => "    " + string.Join(" ", Enumerable.Select<int, string>(Array, n => $"{n,2}"));
+    public override string ToString() => "    " + string.Join(" ", Array.Select(n => $"{n,2}"));
   }
 }

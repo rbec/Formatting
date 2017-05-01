@@ -9,8 +9,10 @@
     }
 
     public int Head;
+
     public int Tail;
- //   public override string ToString() => $"{Head} → {Tail}";
+
+    //   public override string ToString() => $"{Head} → {Tail}";
     public override string ToString() => $"{Head} -> {Tail}";
   }
 }
