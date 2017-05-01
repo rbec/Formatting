@@ -39,7 +39,7 @@ namespace Rbec.FormattingTest.Graphs
         {
           for (var j = 0; j < array.Length; j++)
             array[j] = random.Next(10);
-          var edges = new Edges(array);
+          var edges = new Problem(array);
           Assert.IsTrue(IsFeasible(edges, Solver.Feasible(edges)));
         }
       }
@@ -56,20 +56,20 @@ namespace Rbec.FormattingTest.Graphs
         {
           for (var j = 0; j < array.Length; j++)
             array[j] = random.Next(10);
-          var edges = new Edges(array);
+          var edges = new Problem(array);
           var solution = Solver.Solve(edges);
           Assert.IsTrue(IsFeasible(edges, solution), $"{Environment.NewLine}{edges}{Environment.NewLine}{Environment.NewLine}{solution}{Environment.NewLine}{Solver.Feasible(edges)}");
         }
       }
     }
 
-    public static bool IsFeasible(Edges edges, Solution sol)
+    public static bool IsFeasible(Problem problem, Solution sol)
     {
-      var l = edges.Count;
+      var l = problem.Length;
       for (var k = 0; k < sol.Length; k++)
         for (var i = 0; i <= k; i++)
           for (var j = 0; j < l - k; j++)
-            if (sol[i, l - j - 1] < edges[i, j])
+            if (sol[i, j] < problem[i, j])
               return false;
       return true;
     }
@@ -93,11 +93,11 @@ namespace Rbec.FormattingTest.Graphs
       }
     }
 
-    public static Solution ExhaustiveSearch(Edges edges)
+    public static Solution ExhaustiveSearch(Problem problem)
     {
-      foreach (var sol in All(edges.Count, 5))
+      foreach (var sol in All(problem.Length, 5))
       {
-        if (IsFeasible(edges, sol))
+        if (IsFeasible(problem, sol))
           return sol;
       }
       throw new NotImplementedException();
@@ -116,7 +116,7 @@ namespace Rbec.FormattingTest.Graphs
         {
           for (var j = 0; j < array.Length; j++)
             array[j] = random.Next(6);
-          var edges = new Edges(array);
+          var edges = new Problem(array);
           var solution = Solver.Solve(edges);
           Assert.AreEqual(ExhaustiveSearch(edges).Length, solution.Length);
         }

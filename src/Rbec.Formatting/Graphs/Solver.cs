@@ -16,31 +16,30 @@ namespace Rbec.Formatting.Graphs
       return sum;
     }
 
-    public static Solution Solve(Edges edges) => Solve(edges, Feasible(edges));
+    public static Solution Solve(Problem problem) => Solve(problem, Feasible(problem));
 
-    public static Solution Solve(Edges edges, Solution sol)
+    public static Solution Solve(Problem problem, Solution solution)
     {
-      var l = edges.Count;
-      for (var k = 0; k < sol.Length; k++)
+      for (var k = 0; k < solution.Length; k++)
       {
         var δ = int.MaxValue;
         for (var i = 0; i <= k; i++)
-          for (var j = 0; j < l - k; j++)
-            δ = Math.Min(δ, sol[i, l - j - 1] - edges[i, j]);
+          for (var j = 0; j < solution.Length - k; j++)
+            δ = Math.Min(δ, solution[i, j] - problem[i, j]);
         if (δ > 0)
-          sol.Delta(k, -δ);
+          solution.Delta(k, -δ);
       }
-      return sol;
+      return solution;
     }
 
-    public static Solution Feasible(Edges edges)
+    public static Solution Feasible(Problem problem)
     {
-      var sol = new int[edges.Count];
+      var sol = new int[problem.Length];
       for (var i = 0; i < sol.Length; i++)
       {
         var max = 0;
         for (var j = 0; j < sol.Length - i; j++)
-          max = Math.Max(max, edges[i, j]);
+          max = Math.Max(max, problem[i, j]);
         sol[i] = max;
       }
       return new Solution(PrefixSum(sol));
@@ -63,20 +62,29 @@ namespace Rbec.Formatting.Graphs
       var graph = constraints.Keys.GroupBy(key => key.Head).ToDictionary(g => g.Key, g => g.Select(e => e.Tail).ToArray());
       var order = graph.TopologicalOrder();
 
-      var k = order.Length - 1;
-
-      var array = new int[k * (k + 1) / 2];
+      var problem = new Problem(order.Length - 1);
 
       foreach (var constraint in constraints)
       {
-        var h = Array.IndexOf(order, constraint.Key.Head);
-        var t = k - Array.IndexOf(order, constraint.Key.Tail);
+        var i = Array.IndexOf(order, constraint.Key.Head);
+        var j = problem.Length - Array.IndexOf(order, constraint.Key.Tail);
 
-        array[(h + t) * (h + t + 1) / 2 + h] = constraint.Value;
+        problem[i, j] = constraint.Value;
       }
+      var sol = Solve(problem);
+      //var k = order.Length - 1;
 
-      var edges = new Edges(array);
-      var sol = Solve(edges);
+      //var array = new int[k * (k + 1) / 2];
+
+      //foreach (var constraint in constraints)
+      //{
+      //  var i = Array.IndexOf(order, constraint.Key.Head);
+      //  var j = k - Array.IndexOf(order, constraint.Key.Tail);
+
+      //  array[(i + j) * (i + j + 1) / 2 + i] = constraint.Value;
+      //}
+
+      //var sol = Solve(new Problem(array));
 
       var dict = new Dictionary<int, int> {{order[0], 0}};
       for (var i = 0; i < sol.Length; i++)

@@ -13,7 +13,7 @@ namespace Rbec.Formatting.Graphs
       Array = array;
     }
 
-    public int this[int a, int b] => Array[b] - (a == 0 ? 0 : Array[a - 1]);
+    public int this[int col, int row] => Array[Length - row - 1] - (col == 0 ? 0 : Array[col - 1]);
 
     public void Delta(int i, int δ)
     {
