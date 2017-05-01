@@ -1,30 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
-using BenchmarkDotNet.Running;
 using Rbec.Formatting.Graphs;
-using Rbec.FormattingTest.Graphs;
 
 namespace Sandbox
 {
   [MinColumn, MaxColumn]
   public class Benchmarks
   {
-    [Benchmark] public void A()
-    {
-      for (var i = 0; i < 100000; i++)
-        Combinatronics.A(i);
-    }
-
-    [Benchmark] public void C()
-    {
-      for (var i = 0; i < 100000; i++)
-        Combinatronics.C(i);
-    }
-
     //[Benchmark] public void TriangleInvert1()
     //{
     //  for (var i = 0; i < 100000; i++)

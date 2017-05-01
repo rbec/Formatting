@@ -1,36 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Rbec.Formatting.Graphs
 {
-  public sealed class Solution
-  {
-    public readonly int[] Array;
-
-    public int Length => Array.Length;
-
-    public Solution(int[] array)
-    {
-      Array = array;
-    }
-
-    public int this[int a, int b] => Array[b] - (a == 0 ? 0 : Array[a - 1]);
-
-    public void Delta(int i, int δ)
-    {
-      for (var j = i; j < Array.Length; j++)
-        Array[j] += δ;
-    }
-
-    public override string ToString()
-    {
-      return "    " + string.Join(" ", Array.Select(n => $"{n,2}"));
-    }
-
-    public int Size => Array[Array.Length - 1];
-  }
-
   public sealed class Edges
   {
     private readonly int[] Array;
@@ -149,23 +121,6 @@ namespace Rbec.Formatting.Graphs
       var k = ((int) Math.Sqrt(1.0 + 8 * n) - 1) / 2;
       var i = n - k * (k + 1) / 2;
       return (i, k - i);
-    }
-
-    public static int A(int n) => ((int) Math.Sqrt(1.0 + 8 * n) - 1) / 2;
-
-    public static int C(int n)
-    {
-      var start = 1;
-      var count = n;
-      while (count > 0)
-      {
-        var δ = count >> 1;
-        var k = start + δ;
-        if (k * (k + 1) / 2 <= n)
-          start += count - δ;
-        count -= count - δ;
-      }
-      return start - 1;
     }
   }
 }

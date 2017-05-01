@@ -18,9 +18,9 @@ namespace Rbec.Formatting.Graphs
       foreach (var constraint in constraints)
       {
         var h = Array.IndexOf(order, constraint.Key.Head);
-        var t = k-Array.IndexOf(order, constraint.Key.Tail);
+        var t = k - Array.IndexOf(order, constraint.Key.Tail);
 
-        array[(h + t) * (h + t + 1)/2 + h] = constraint.Value;
+        array[(h + t) * (h + t + 1) / 2 + h] = constraint.Value;
       }
 
       var edges = new Edges(array);
@@ -28,7 +28,7 @@ namespace Rbec.Formatting.Graphs
 
       var dict = new Dictionary<int, int> {{order[0], 0}};
       for (var i = 0; i < sol.Length; i++)
-        dict.Add(order[i+1], sol.Array[i]);
+        dict.Add(order[i + 1], sol.Array[i]);
 
       return dict;
     }

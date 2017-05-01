@@ -13,7 +13,7 @@ namespace Rbec.Formatting.Graphs
       while (unmarked.Count > 0)
         Visit(unmarked[0]);
 
-      return (order as IEnumerable<int>).Reverse().ToArray();
+      return ((IEnumerable<int>) order).Reverse().ToArray();
 
       void Visit(int n)
       {
