@@ -22,27 +22,27 @@ namespace Rbec.Formatting.Graphs
     {
       for (var k = 0; k < solution.Length; k++)
       {
-        var δ = int.MaxValue;
+        var min = int.MaxValue;
         for (var i = 0; i <= k; i++)
-          for (var j = 0; j < solution.Length - k; j++)
-            δ = Math.Min(δ, solution[i, j] - problem[i, j]);
-        if (δ > 0)
-          solution.Delta(k, -δ);
+          for (var j = k; j < solution.Length; j++)
+            min = Math.Min(min, solution[i, j] - problem[i, j]);
+        if (min > 0)
+          solution.Delta(k, -min);
       }
       return solution;
     }
 
     public static Solution Feasible(Problem problem)
     {
-      var sol = new int[problem.Length];
-      for (var i = 0; i < sol.Length; i++)
+      var solution = new int[problem.Length];
+      for (var i = 0; i < solution.Length; i++)
       {
         var max = 0;
-        for (var j = 0; j < sol.Length - i; j++)
+        for (var j = i; j < solution.Length; j++)
           max = Math.Max(max, problem[i, j]);
-        sol[i] = max;
+        solution[i] = max;
       }
-      return new Solution(PrefixSum(sol));
+      return new Solution(PrefixSum(solution));
     }
 
     public static int EncodeTriangle((int i, int j) coordinate) =>
@@ -57,38 +57,21 @@ namespace Rbec.Formatting.Graphs
       return (i, k - i);
     }
 
-    public static Dictionary<int, int> ToLayout(this IReadOnlyDictionary<Edge, int> constraints)
+    public static Dictionary<int, int> ToLayout(this IEnumerable<Constraint> constraints)
     {
-      var graph = constraints.Keys.GroupBy(key => key.Head).ToDictionary(g => g.Key, g => g.Select(e => e.Tail).ToArray());
+      var graph = constraints.GroupBy(key => key.Head).ToDictionary(g => g.Key, g => g.Select(e => e.Tail).ToArray());
       var order = graph.TopologicalOrder();
 
       var problem = new Problem(order.Length - 1);
 
       foreach (var constraint in constraints)
-      {
-        var i = Array.IndexOf(order, constraint.Key.Head);
-        var j = problem.Length - Array.IndexOf(order, constraint.Key.Tail);
+        problem[Array.IndexOf(order, constraint.Head), Array.IndexOf(order, constraint.Tail) + 1] = constraint.Minimum;
 
-        problem[i, j] = constraint.Value;
-      }
-      var sol = Solve(problem);
-      //var k = order.Length - 1;
-
-      //var array = new int[k * (k + 1) / 2];
-
-      //foreach (var constraint in constraints)
-      //{
-      //  var i = Array.IndexOf(order, constraint.Key.Head);
-      //  var j = k - Array.IndexOf(order, constraint.Key.Tail);
-
-      //  array[(i + j) * (i + j + 1) / 2 + i] = constraint.Value;
-      //}
-
-      //var sol = Solve(new Problem(array));
+      var solution = Solve(problem);
 
       var dict = new Dictionary<int, int> {{order[0], 0}};
-      for (var i = 0; i < sol.Length; i++)
-        dict.Add(order[i + 1], sol.Array[i]);
+      for (var i = 0; i < solution.Length; i++)
+        dict.Add(order[i + 1], solution.Array[i]);
 
       return dict;
     }
@@ -105,14 +88,12 @@ namespace Rbec.Formatting.Graphs
 
       void Visit(int n)
       {
-        if (unmarked.Contains(n))
-        {
-          if (g.ContainsKey(n))
-            foreach (var m in g[n])
-              Visit(m);
-          unmarked.Remove(n);
-          order.Add(n);
-        }
+        if (!unmarked.Contains(n)) return;
+        if (g.ContainsKey(n))
+          foreach (var m in g[n])
+            Visit(m);
+        unmarked.Remove(n);
+        order.Add(n);
       }
     }
   }

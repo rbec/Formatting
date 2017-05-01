@@ -58,18 +58,17 @@ namespace Rbec.FormattingTest.Graphs
             array[j] = random.Next(10);
           var edges = new Problem(array);
           var solution = Solver.Solve(edges);
-          Assert.IsTrue(IsFeasible(edges, solution), $"{Environment.NewLine}{edges}{Environment.NewLine}{Environment.NewLine}{solution}{Environment.NewLine}{Solver.Feasible(edges)}");
+          Assert.IsTrue(IsFeasible(edges, solution));
         }
       }
     }
 
-    public static bool IsFeasible(Problem problem, Solution sol)
+    public static bool IsFeasible(Problem problem, Solution solution)
     {
-      var l = problem.Length;
-      for (var k = 0; k < sol.Length; k++)
+      for (var k = 0; k < solution.Length; k++)
         for (var i = 0; i <= k; i++)
-          for (var j = 0; j < l - k; j++)
-            if (sol[i, j] < problem[i, j])
+          for (var j = k; j < problem.Length; j++)
+            if (solution[i, j] < problem[i, j])
               return false;
       return true;
     }
@@ -141,12 +140,12 @@ namespace Rbec.FormattingTest.Graphs
 
     [TestMethod] public void TestGenerate()
     {
-      var g = new Dictionary<Edge, int>
+      var g = new[]
               {
-                {new Edge(5, 3), 2},
-                {new Edge(3, 9), 7}
+                new Constraint(5, 3, 2),
+                new Constraint(3, 9, 7)
               };
-      var order = Solver.ToLayout(g);
+      var order = g.ToLayout();
       var s = string.Join(" ", order);
       Console.WriteLine(s);
     }

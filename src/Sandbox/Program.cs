@@ -25,15 +25,15 @@ namespace Sandbox
   {
     static void Main(string[] args)
     {
-      var g = new Dictionary<Edge, int>
+      var g = new[]
               {
-                {new Edge(9, 8), 2},
-                {new Edge(8, 7), 3},
-                {new Edge(7, 6), 1},
-                {new Edge(8, 6), 5},
-                {new Edge(9, 7), 5},
+                new Constraint(9, 8, 2),
+                new Constraint(8, 7, 3),
+                new Constraint(7, 6, 1),
+                new Constraint(8, 6, 5),
+                new Constraint(9, 7, 5),
               };
-      var order = Solver.ToLayout(g);
+      var order = g.ToLayout();
       var s = string.Join(" ", order);
       Console.WriteLine(s);
 
